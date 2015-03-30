@@ -1,4 +1,8 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android" >
 
+    <item
+        android:id="@+id/menu_games"
+        android:showAsAction="never"
+        android:title="@string/menu_games"/>
 
 </menu>

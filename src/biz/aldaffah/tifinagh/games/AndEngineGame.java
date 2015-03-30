@@ -14,7 +14,7 @@ import org.andengine.opengl.texture.region.TextureRegion;
 import org.andengine.ui.activity.SimpleBaseGameActivity;
 import org.andengine.util.color.Color;
 
-public class Game extends SimpleBaseGameActivity {
+public class AndEngineGame extends SimpleBaseGameActivity {
     // ===========================================================
     // Constants
     // ===========================================================
@@ -57,8 +57,9 @@ public class Game extends SimpleBaseGameActivity {
     protected void onCreateResources()
     {
         // TODO Auto-generated method stub
+        BitmapTextureAtlasTextureRegionFactory.setAssetBasePath("gfx/");
         texImage = new BitmapTextureAtlas(this.getTextureManager(), 512, 512, TextureOptions.BILINEAR_PREMULTIPLYALPHA);
-        regImage = BitmapTextureAtlasTextureRegionFactory.createFromAsset(texImage, this.getAssets(), "gfx/bijoux-messages/a.jpg",0,0);
+        regImage = BitmapTextureAtlasTextureRegionFactory.createFromAsset(texImage, this.getAssets(), "a.png",0,0);
         texImage.load();
 
     }
