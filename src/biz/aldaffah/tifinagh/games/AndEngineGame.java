@@ -4,9 +4,15 @@ import org.andengine.engine.camera.Camera;
 import org.andengine.engine.options.EngineOptions;
 import org.andengine.engine.options.ScreenOrientation;
 import org.andengine.engine.options.resolutionpolicy.RatioResolutionPolicy;
+import org.andengine.entity.primitive.Rectangle;
+import org.andengine.entity.scene.IOnSceneTouchListener;
 import org.andengine.entity.scene.Scene;
 import org.andengine.entity.scene.background.Background;
 import org.andengine.entity.sprite.Sprite;
+import org.andengine.entity.text.Text;
+import org.andengine.input.touch.TouchEvent;
+import org.andengine.opengl.font.Font;
+import org.andengine.opengl.font.FontFactory;
 import org.andengine.opengl.texture.TextureOptions;
 import org.andengine.opengl.texture.atlas.bitmap.BitmapTextureAtlas;
 import org.andengine.opengl.texture.atlas.bitmap.BitmapTextureAtlasTextureRegionFactory;
@@ -30,6 +36,9 @@ public class AndEngineGame extends SimpleBaseGameActivity {
     private BitmapTextureAtlas texImage;
     private TextureRegion  regImage;
     private Sprite   sprImage;
+
+    private Font mFont;
+    private Text mText;
 
     // ===========================================================
     // Constructors
@@ -58,9 +67,18 @@ public class AndEngineGame extends SimpleBaseGameActivity {
     {
         // TODO Auto-generated method stub
         BitmapTextureAtlasTextureRegionFactory.setAssetBasePath("gfx/");
-        texImage = new BitmapTextureAtlas(this.getTextureManager(), 512, 512, TextureOptions.BILINEAR_PREMULTIPLYALPHA);
+        texImage = new BitmapTextureAtlas(this.getTextureManager(), 125, 125, TextureOptions.BILINEAR_PREMULTIPLYALPHA);
         regImage = BitmapTextureAtlasTextureRegionFactory.createFromAsset(texImage, this.getAssets(), "a.png",0,0);
         texImage.load();
+
+
+        FontFactory.setAssetBasePath("fonts/");
+        BitmapTextureAtlas fontTexture = new BitmapTextureAtlas(this.getTextureManager(), 125, 125, TextureOptions.BILINEAR);
+        mFont = FontFactory.createFromAsset(this.getFontManager(), fontTexture, this.getAssets(), "Roboto-Regular.ttf", 25, true, android.graphics.Color.BLACK);
+        fontTexture.load();
+        mFont.load();
+
+
 
     }
 
@@ -71,8 +89,52 @@ public class AndEngineGame extends SimpleBaseGameActivity {
         m_Scene.setBackground(new Background(Color.WHITE));
 
         sprImage = new Sprite(0, 0, regImage, this.getVertexBufferObjectManager());
+
+
+
+        //One create a rectangle in pixels
+        final Rectangle rect1 = new Rectangle(0, 250, 125, 125, this.getVertexBufferObjectManager());
+        rect1.setColor(0, 0, 0);
+
+        /*
+         Ideas for Augmented reality
+         */
+         final Rectangle rect2 = new Rectangle(10, 260, 105, 105, this.getVertexBufferObjectManager());
+         rect2.setColor(1, 1, 1);
+
+         mText = new Text(15, 305, mFont, "AMOUR", this.getVertexBufferObjectManager());
+
+
+
+        m_Scene.attachChild(rect1);
+        m_Scene.attachChild(rect2);
+        m_Scene.attachChild(mText);
         m_Scene.attachChild(sprImage);
+
+        m_Scene.setOnSceneTouchListener(new IOnSceneTouchListener(){
+            @Override
+            public boolean onSceneTouchEvent(Scene pScene,TouchEvent pSceneTouchEvent) {
+
+                    int X = (int) (pSceneTouchEvent.getX() - sprImage.getWidth() / 2);
+                    int Y = (int) (pSceneTouchEvent.getY() - sprImage.getHeight() / 2);
+
+                    sprImage.setPosition(X, Y);
+
+                /* TODO: Make a function affecting the square position to the message
+                 *
+                if ((sprImage.getY()- sprImage.getWidth() / 2)>=250 || (sprImage.getY()- sprImage.getHeight() / 2)<=375){
+
+                    sprImage.setPosition(0,250);
+                    toastOnUIThread("Oui !");
+                }
+                */
+                return false;
+            }
+        });
+
         return m_Scene;
     }
+
+
 
 }
